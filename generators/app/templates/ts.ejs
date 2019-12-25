@@ -1,0 +1,32 @@
+/*jshint -W069 */
+import { request } from './request';
+
+<%definitions.forEach(element => {%>
+<%if(element.description){%>/** <%=element.description%>*/<%}%>
+   export type <%=element.name%> = {
+    <%element.tsType.properties.forEach(propertity =>{%>
+    <%=propertity.name%><%if(propertity.optional){_%>?<%}%>:<%if(propertity.isRef){%><%=propertity.target%><%}%><%if(propertity.isAtomic){%><%- propertity.tsType %><%}%><%if(propertity.isArray){%>Array<<%if(propertity.elementType.target){%><%- propertity.elementType.target %><%} else {%>any<%}%>><%}_%>
+    <%})%>
+    }
+<%})%>
+
+export default class <%=className %> {
+<% methods.forEach( method => {%>
+/**
+* @name <%=method.summary_%>
+* <% method.parameters.forEach(parameter => {%>
+* @param <%=parameter.type %> <%=parameter.camelCaseName %> - <%=parameter.description _%>
+<%})%>
+*/
+<%=method.methodName %> (
+  payload: {
+<% method.parameters.forEach(parameter => {
+    let paramType = parameter.tsType.target || parameter.tsType.tsType;
+    if(paramType === "array"){paramType = "Array<"+parameter.tsType.elementType.target+">"}%>'<%=parameter.camelCaseName %>'<%=parameter.required %>:<%-paramType %>,<%})_%>
+}
+): Promise<any>{
+  let url = '<%=method.path%>';
+<%_method.parameters.forEach(parameter => {%><%if(parameter.isPathParameter) {%>url = url.replace('{<%=parameter.camelCaseName%>}',payload.<%=parameter.camelCaseName%>);<%}%><%})_%>
+return request(url,'<%=method.method%>',payload)}
+<%})%>
+}
