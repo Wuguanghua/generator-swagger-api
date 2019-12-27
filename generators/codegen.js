@@ -32,7 +32,6 @@ let getPathToMethodName = function(opts, m, path) {
 
 let getViewForSwagger = function (opts) {
   let swagger = JSON.parse(opts.swagger);
-  console.log('swagger===>>>', swagger);
   let methods = [];
   let paramsDefinitions = []; // 当前需要的 params 定义
   let authorizedMethods = [
