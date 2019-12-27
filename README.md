@@ -23,7 +23,7 @@ yo swagger-api
 
 ## 如何使用
 
- 1. 从服务端人员获得`xxx.yaml` 文件，导入`editor.swagger.io`,[editor.swagger.io](http://editor.swagger.io/) 生成 `swagger.json` 文件；
+ 1. 从服务端人员获得`xxx.yaml` 文件，导入[editor.swagger.io](http://editor.swagger.io/) 生成 `swagger.json` 文件；
  2. 命令行输入`yo swagger-api`，按照提示操作；
   
 
@@ -46,6 +46,11 @@ yo swagger-api
 ? 请把 swagger.json 文件拖拽到这里 /Users/***/generators/swagger.json
    create api.ts
 ```
+
+
+## 引用
+- [swagger-js-codegen](https://github.com/wcandillon/swagger-js-codegen)
+- [generator-swagger-2-ts](https://github.com/jadepeng/generator-swagger-2-ts)
 
 ## 了解 Yeoman
 
