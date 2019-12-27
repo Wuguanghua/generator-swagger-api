@@ -1,0 +1,34 @@
+/*jshint -W069 */
+import { request } from './request';
+
+export default class <%=className %> {
+
+  <% methods.forEach( method => {%>
+    /**
+    * <%=method.summary%>
+    * @method
+    * @name <%=className %>#<%=method.summary%>
+    <% method.parameters.forEach(parameter => { %>* @param <%=parameter.type %> <%=parameter.camelCaseName %> - <%=parameter.description %> <%} ) %>
+    */
+    <%=method.methodName %> (parameters){
+      let body = null;
+      let config = {
+        url: '<%=method.path %>',
+        method: '<%=method.method %>'
+      };
+
+      config.headers = {}
+      <% if ( method.headers ) { %><% method.headers.forEach( header => {%>
+      config.headers['<%=header.name%>'] = <%-header.value%>;<% }) %><% } %>
+      <% method.parameters.forEach( parameter => { %>
+      <% if (parameter.isHeaderParameter ) { %>config.headers['<%=parameter.camelCaseName%>'] = parameters.<%=parameter.camelCaseName%>;<% } %><% if ( parameter.isPathParameter ) { %>config.url = config.url.replace('{<%=parameter.camelCaseName%>}',parameters.<%=parameter.camelCaseName%>+'');<% } %><% if ( parameter.isBodyParameter ) {%>body = parameters.<%=parameter.camelCaseName %>;
+      config.data = body;<% } %><% } ) %>
+
+      if (body) {
+        config.data = body
+      }
+      return request(config);
+    }
+  <%} ) %>
+
+}

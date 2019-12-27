@@ -1,5 +1,5 @@
 {
-  "name": "generator-swagger-api-tool",
+  "name": "generator-swagger-api",
   "version": "1.0.0",
   "description": "",
   "homepage": "",
@@ -33,8 +33,9 @@
   },
   "license": "ISC",
   "dependencies": {
-    "yeoman-generator": "^2.0.1",
     "chalk": "^2.1.0",
+    "gulp-beautify": "^3.0.0",
+    "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },
   "jest": {

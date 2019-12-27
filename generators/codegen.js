@@ -30,8 +30,9 @@ let getPathToMethodName = function(opts, m, path) {
   return m.toLowerCase() + result[0].toUpperCase() + result.substring(1);
 };
 
-let getViewForSwagger = function(opts) {
-  let swagger = opts.swagger;
+let getViewForSwagger = function (opts) {
+  let swagger = JSON.parse(opts.swagger);
+  console.log('swagger===>>>', swagger);
   let methods = [];
   let paramsDefinitions = []; // 当前需要的 params 定义
   let authorizedMethods = [

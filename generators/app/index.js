@@ -6,15 +6,13 @@ let beautify = require("gulp-beautify");
 
 const codegen = require("../codegen");
 
-const swaggerJson = require("../swagger.json");
-
 module.exports = class extends Generator {
   prompting() {
     // Have Yeoman greet the user.
     this.log(
       yosay(
         `Welcome to the beautiful ${chalk.red(
-          "generator-swagger-api-tool"
+          "generator-swagger-api"
         )} generator!`
       )
     );
@@ -23,14 +21,26 @@ module.exports = class extends Generator {
       {
         type: "input",
         name: "className",
-        message: "please enter class Name of the generated API",
+        message: "请输入生成器 className",
         default: "Api"
+      },
+      {
+        type: "list",
+        name: "templateType",
+        message: "请选择模板文件",
+        choices: ["ts.ejs", "js.ejs"],
+        default: "ts.ejs"
       },
       {
         type: "input",
         name: "outPutFile",
-        message: "Please enter the API file name",
-        default: "api.ts"
+        message: "请输入输出文件名(没有文件后缀)",
+        default: "api"
+      },
+      {
+        type: "input",
+        name: "sourceFile",
+        message: "请把 swagger.json 文件拖拽到这里"
       }
     ];
 
@@ -42,13 +52,18 @@ module.exports = class extends Generator {
 
   writing() {
     let clsName = this.props.className;
-    let outPutFile = this.props.outPutFile;
+    let sourceFile = this.props.sourceFile;
+    let templateType = this.props.templateType;
+    let outPutFile = this.props.templateType === 'js.ejs' ? this.props.outPutFile + '.js' : this.props.outPutFile + '.ts';
+    if (!sourceFile) {
+      return this.log("未检测到swagger文件，请将 swagger.json 文件拖拽至此重试！");
+    }
     let swaggerData = codegen.getViewForSwagger({
-      swagger: swaggerJson,
+      swagger: this.fs.read(sourceFile),
       className: clsName
     });
     this.fs.copyTpl(
-      this.templatePath("ts.ejs"),
+      this.templatePath(templateType),
       this.destinationPath(outPutFile),
       swaggerData
     );
